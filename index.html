@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="Css/index.css">
+</head>
+
+<body>
+    <div class="load-wrap" style="display:flex;">
+        <div class="load"></div>
+    </div>
+    <div class='bg-more' style="display: none"></div>
+    <div class='bg-more-dark' style="visibility: hidden;"></div>
+    <div class="bg-more-dark-hd" style="visibility: hidden;"></div>
+    <div class="detail-main" style="transform: translateX(100%)">
+        <div class="addKH-title">
+            <div style="display: flex;gap: 10px;">
+                <h1>CHI TIẾT KHÁCH HÀNG</h1>
+            </div>
+            <div id="clost-detail">
+                <p>Thoát</p>
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+        </div>
+        <div class="nav-con">
+            <p class="nav-con-items ttctnav acc">Thông tin chi tiết</p>
+            <p class="nav-con-items thdnav">Hóa đơn</p>
+        </div>
+        <div id="main-boxmore"></div>
+    </div>
+    <div class="wrapHD" style="display:none">
+        <div class="addKH-title">
+            <div style="display: flex;gap: 10px;">
+                <h1></h1>
+            </div>
+            <div id="clost-detailHD">
+                <p>Thoát</p>
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+        </div>
+        <div id="main-CTHD"></div>
+    </div>
+    <div class="addKH" style="transform: translateX(100%)">
+        <div class="addKH-title">
+            <h1>THÊM KHÁCH HÀNG</h1>
+            <div id="clost-detail" class="clostadd">
+                <p>Thoát</p>
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+        </div>
+        <div class="form-wrap"></div>
+    </div>
+    <div class="addHD" style="display: none;">
+        <div class="addKH-title">
+            <h1>Thêm Hóa Đơn</h1>
+            <i class="bi bi-x-circle clostaddHD"></i>
+        </div>
+        <form id="formaddHD">
+            <div class="form-wrap-input-HD" style="display: none;">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: 1em; padding: 5px;">ID Khách Hàng:</p>
+                    <input name="iddate" class="input-addsHD" type="text" required></input>
+                    <input name="Pt" class="input-addsHD" type="text" required></input>
+                    <input name="T" class="input-addsHD" type="text" required></input>
+                    <input name="Nb" class="input-addsHD" type="text" required></input>
+                    <input name="address" class="input-addsHD" type="text" required></input>
+                    <input name="DB" class="input-addsHD" type="text" required></input>
+                    <input name="NameNH" class="input-addsHD" type="text" required></input>
+                    <input name="MsT" class="input-addsHD" type="text" required></input>
+                    <input name="lDH" class="input-addsHD" type="text" required></input>
+                    <input name="kDH" class="input-addsHD" type="text" required></input>
+                    <input name="mDH" class="input-addsHD" type="text" required></input>
+                    <input name="lNT" class="input-addsHD" type="text" required></input>
+                    <input name="sH" class="input-addsHD" type="text" required></input>
+                    <input name="pay" class="input-addsHD" type="text" required></input>
+                    <input name="loai" class="input-addsHD" type="text" required></input>
+                    <input name="id" class="input-addsHD" type="text" required></input>
+                    <input name="name" class="input-addsHD" type="text" required></input>
+                    <input name="lHT" class="input-addsHD" type="text" required></input>
+                </div>
+            </div>
+            <div class="form-wrap-input-HD" style="display: none;">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Tên Khách Hàng:</p>
+                    <input style="margin: 0;width: calc(100% - 10px);border: 1px solid rgb(198,205,211);" name="phone"
+                        class="input-addsHD" type="text" required></input>
+                </div>
+            </div>
+            <div class="form-wrap-input-HD">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Chỉ số mới:</p>
+                    <input style="margin: 0;width: calc(100% - 10px);border: 1px solid rgb(198,205,211);" name="STK"
+                        class="input-addsHD" type="text" required></input>
+                </div>
+            </div>
+            <div class="form-wrap-input-HD">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Ngày ghi chỉ số:</p>
+                    <input style="margin: 0;width: calc(100% - 10px);border: 1px solid rgb(198,205,211);"
+                        name="addressdt" class="input-addsHD" type="date" required></input>
+                </div>
+            </div>
+            <div class="form-wrap-input-HD">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Tình trạng hóa đơn:</p>
+                    <select onclick="g()" style="margin: 0;width: calc(100%);border: 1px solid rgb(198,205,211);"
+                        name="tt" class="input-addsHD">
+                        <option style="padding: 5px 10px;" value="Còn nợ">Còn nợ</option>
+                        <option style="padding: 5px 10px;" value="Hết nợ">Hết nợ</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-wrap-input-HD">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Ngày thu:</p>
+                    <input style="margin: 0;width: calc(100% - 10px);border: 1px solid rgb(198,205,211);" name="NT"
+                        class="input-addsHD" type="date" disabled="disabled"></input>
+                </div>
+            </div>
+            <div class="form-wrap-input-HD">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Phương thức thanh toán:</p>
+                    <select disabled="disabled" style="margin: 0;width: calc(100% );border: 1px solid rgb(198,205,211);"
+                        name="pttt" class="input-addsHD">
+                        <option value=""></option>
+                        <option style="padding: 5px 10px;" value="Chuyển khoản">Chuyển khoản</option>
+                        <option style="padding: 5px 10px;" value="Tiền mặt">Tiền mặt</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-wrap-input-HD">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Nhân viên thanh toán:</p>
+                    <input style="margin: 0;width: calc(100% - 10px);border: 1px solid rgb(198,205,211);" name="nvtt"
+                        class="input-addsHD" type="text" disabled="disabled"></input>
+                </div>
+            </div>
+            <div class="form-wrap-input-HD">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Tiền giảm:</p>
+                    <input style="margin: 0;width: calc(100% - 10px);border: 1px solid rgb(198,205,211);" name="TG"
+                        class="input-addsHD" type="text" disabled="disabled"></input>
+                </div>
+            </div>
+            <div class="form-wrap-input-HD">
+                <div class="input-add-wrap-HD">
+                    <p style="color: #818182; font-size: .9em; padding: 5px;">Người lập hóa đơn:</p>
+                    <input style="margin: 0;width: calc(100% - 10px);border: 1px solid rgb(198,205,211);" name="Pmt"
+                        class="input-addsHD" type="text"></input>
+                </div>
+            </div>
+            <script>
+                function g() {
+                    if (document.querySelector(`select.input-addsHD[name="tt"]`).value == 'Hết nợ') {
+                        document.querySelector('.input-addsHD[name="NT"]').removeAttribute('disabled');
+                        document.querySelector('.input-addsHD[name="TG"]').removeAttribute('disabled');
+                        document.querySelector('.input-addsHD[name="pttt"]').removeAttribute('disabled');
+                        document.querySelector('.input-addsHD[name="nvtt"]').removeAttribute('disabled');
+                    }
+                    else if (document.querySelector(`select.input-addsHD[name="tt"]`).value == 'Còn nợ') {
+                        document.querySelector('.input-addsHD[name="NT"]').setAttribute('disabled', 'disabled');
+                        document.querySelector('.input-addsHD[name="TG"]').setAttribute('disabled', 'disabled');
+                        document.querySelector('.input-addsHD[name="pttt"]').setAttribute('disabled', 'disabled');
+                        document.querySelector('.input-addsHD[name="nvtt"]').setAttribute('disabled', 'disabled');
+                    }
+                }
+            </script>
+        </form>
+        <div class="submitadd">
+            <button id="getaddHD">Thêm hóa đơn</button>
+        </div>
+    </div>
+    <div id="thongbao"></div>
+
+    <div class="thttKH" style="display:none">
+        <div class="thttKH-h1">
+            <h1>TÌNH HÌNH TIÊU THỤ KHÁCH HÀNG</h1>
+            <div id="clost-thttKH">
+                <p>Quay lại</p>
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+        </div>
+
+        <div class="thttKH_ttKH">
+            <h4 class="thttKH_ttKH_name">Tên khách hàng: <p></p>
+            </h4>
+            <h4 class="thttKH_ttKH_adress">Địa chỉ: <p></p>
+            </h4>
+            <h4 class="thttKH_ttKH_ttsd">Trạng thái sử dụng: <p></p>
+            </h4>
+            <h4 class="thttKH_ttKH_Tong">Tổng số tiền khách hàng chưa thanh toán: <p></p>
+            </h4>
+        </div>
+        <div class="thttKH-main-wrap">
+            <div class="thttKH_title">
+                <p>kỳ HĐ</p>
+                <p>giá</p>
+                <p>csc</p>
+                <p>csm</p>
+                <p>kltt</p>
+                <p>tiền nước</p>
+                <p>tiền thuế</p>
+                <p>tiền phí</p>
+                <p>tiền giảm</p>
+                <p>tổng</p>
+                <p>t. nợ</p>
+                <p>loại thu</p>
+                <p>nhân viên</p>
+                <p>ngày thu</p>
+            </div>
+            <div class="thttKH_main" id="thttKH_main"></div>
+        </div>
+    </div>
+
+    <main id="main">
+        <div class="bg" style="display: none;"></div>
+        <div class="menu" style="transform: translateX(-100%);">
+            <h1>CRM</h1>
+            <div class="list">
+                <a class="button">Khách hàng</a>
+                <a class="button" disabled style="background-color: rgb(197, 197, 197)">Báo cáo thu khách hàng</a>
+            </div>
+        </div>
+        <div class="main-wrap">
+            <nav class="main-nav">
+                <i class="bi bi-list"></i>
+                <h1>Khách hàng</h1>
+            </nav>
+            <nav class="main-nav-lg">
+                <h1>CRM</h1>
+                <div class="nav-list">
+                    <a class="nav-lg-items KH acc">Khách hàng</a>
+                    <a class="nav-lg-items BC">Báo cáo doanh thu khách hàng</a>
+                </div>
+            </nav>
+            <div id="main-con">
+                <div class="nav-i-lg">
+                    <div class="additems">
+                        <div class="text">
+                            <i class="bi bi-person-fill-add"></i>
+                        </div>
+                        <h1 class="addclick">Thêm khách hàng</h1>
+                    </div>
+                    <div class="search-wrap">
+                        <input class="search-KH" type="search" id="search"
+                            placeholder="Lọc và tìm kiếm khách hàng theo tên">
+                        <i class="bi bi-search"></i>
+                    </div>
+                </div>
+                <div class="KH-list">
+                    <div id="KHlist"></div>
+                </div>
+            </div>
+            <div id="main-bc" style="display: none;">
+                <div class="nav-i-lg_bc">
+                    <h1 style="font-size: 1.5rem;justify-content: center;width: 100%;display: flex;gap: 1rem;">Báo cáo
+                        doanh
+                        thu khách hàng kì <p>
+                        </p>
+                    </h1>
+                </div>
+                <div class="KH-list">
+                    <div id="BC-list">
+                        <div style="display: flex;gap: 1rem;align-items: center;padding: 1rem;">
+                            Chọn kì:
+                            <select id="kibaocaodt" style="
+                            outline: none;
+                            margin: 0 10px;
+                            padding: 5px 15px;
+                            border: unset;
+                            border-bottom: 1px solid #9e9e9e;" onchange="thaydoi(this)"></select>
+                        </div>
+                        <div class="dsds">
+                            <div class="thttKH-main-wrap" style="border-radius: unset;">
+                                <div class="thttKH_title">
+                                    <p></p>
+                                    <p>Số HĐ</p>
+                                    <p>M3 TT</p>
+                                    <p>Tiền nước giảm</p>
+                                    <p>tiền nước</p>
+                                    <p>tiền thuế</p>
+                                    <p>tiền phí</p>
+                                    <p>cộng</p>
+                                </div>
+                                <div class="thttKH_main" id="bcdtkh_main"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.statically.io/gh/tr1nh/fetch-sheet.js/master/fetch-sheet.min.js"></script>
+    <!--- Jquery js --->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="Js/com.js"></script>
+    <script src="Js/loadcontent.js"></script>
+    <script src="Js/fetch.js"></script>
+    <script>
+        navcrm()
+        function navcrm() {
+            if (document.querySelector('.KH.acc') != null) {
+                document.querySelector('#main-con').style.display = 'block'
+                document.querySelector('.BC').onclick = () => {
+                    document.querySelector('.KH').classList.remove('acc')
+                    document.querySelector('.BC').classList.add('acc')
+                    document.querySelector('#main-con').style.display = 'none'
+                    navcrm()
+                }
+            } else if (document.querySelector('.BC.acc') != null) {
+                document.querySelector('#main-bc').style.display = 'block'
+                document.querySelector('.KH').onclick = () => {
+                    document.querySelector('.BC').classList.remove('acc')
+                    document.querySelector('.KH').classList.add('acc')
+                    document.querySelector('#main-bc').style.display = 'none'
+                    navcrm()
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
