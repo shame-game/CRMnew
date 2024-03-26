@@ -1223,6 +1223,18 @@ function thaydoi(e) {
     let item = ''
     loaddulieutong(td)
 }
+
+function ind() {
+    const element = vam('#inbcdt');
+    html2pdf(element, {
+        margin: 0,
+        filename: 'document.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+    });
+}
+
 function loaddulieutong(td) {
     fetchSheet
         .fetch({
