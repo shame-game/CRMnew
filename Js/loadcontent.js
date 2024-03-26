@@ -290,7 +290,6 @@ function CNTTHD(Children, document) {
                         <input name="pay" class="input-cnttHD" type="text" required value="${row['Thuế GTGT']}"></input>
                         <input name="loai" class="input-cnttHD" type="text" required value="${row['Phí Môi Trường']}"></input>
                         <input name="Nb" class="input-cnttHD" type="text" required></input>
-                        <input name="DB" class="input-cnttHD" type="text" required value="${row['Chỉ Số Cũ']}"></input>
                         <input name="NameNH" class="input-cnttHD" type="text" required></input>
                         <input name="MsT" class="input-cnttHD" type="text" required></input>
                         <input name="lDH" class="input-cnttHD" type="text" required></input>
@@ -299,6 +298,12 @@ function CNTTHD(Children, document) {
                         <input name="sH" class="input-cnttHD" type="text" required></input>
                         <input name="lHT" class="input-cnttHD" type="text" required></input>
                         <input name="mDH" class="input-cnttHD" type="text" required></input>
+                    </div>
+                    <div class="form-wrap-input form-wrap-input_HD">
+                        <div class="input-add-wrap">
+                            <p>Chỉ Số Trước:</p>
+                            <input class="input-cnttHD" name="DB" value="${row['Chỉ Số Cũ']}"></input>
+                        </div>
                     </div>
                     <div class="form-wrap-input form-wrap-input_HD">
                         <div class="input-add-wrap">
@@ -359,7 +364,7 @@ function CNTTHD(Children, document) {
                         padding: 5px 15px;
                         border: unset;
                         border-bottom: 1px solid #9e9e9e;"
-                            name="pttt" class="input-addsHD">`
+                            name="pttt" class="input-cnttHD">`
         Items += h
         Items += `</select>
                     </div>
@@ -372,7 +377,8 @@ function CNTTHD(Children, document) {
             </div>`
         i++
     })
-    vam(`${document}`).innerHTML += Items
+    vam(`${document}`).innerHTML += Items;
+
 }
 
 /* khách hàng */
@@ -1130,7 +1136,6 @@ function TinhHinhTieuThu(Children, document) {
         if (row['Đơn Giá'] == '5800') {
             h = 'Loại 1'
         }
-        let gf = row['Ngày Ghi Chỉ Số'].slice(0, -3)
         let gg = new Date(row['Ngày Ghi Chỉ Số'])
         Items +=
             `<div class="thttKH_items" style="display:none" index=${i}>
@@ -1158,34 +1163,66 @@ function TinhHinhTieuThu(Children, document) {
 
 function lockihoadon(Children) {
     var gut = [];
+    var hdt = []
     Children.forEach((t) => {
-        let gg = new Date(t['Ngày Ghi Chỉ Số']);
-        let h = gg.getMonth() + 1 + '/' + gg.getFullYear()
-        if (gut[h]) {
-            gut[h]++
+        if (t['Tình trạng'] == 'Hết nợ') {
+            let gg = new Date(t['Ngày Ghi Chỉ Số']);
+            let h = gg.getMonth() + 1 + '/' + gg.getFullYear()
+            if (gut[h]) {
+                gut[h]++
+            }
+            else {
+                gut[h] = 1
+            }
         }
         else {
-            gut[h] = 1
+            let gg = new Date(t['Ngày Ghi Chỉ Số']);
+            let h = gg.getMonth() + 1 + '/' + gg.getFullYear()
+            if (hdt[h]) {
+                hdt[h]++
+            }
+            else {
+                hdt[h] = 1
+            }
         }
     })
     let Pro_wrap = '';
+    let Pro_wrap1 = '';
     let o = 1
     Object.keys(gut).forEach(key => {
         Pro_wrap += `<option style="padding: 5px 10px;" value="${key}" id=${o}>${key}</option>`;
         o++
     })
+    let y = 1
+    Object.keys(hdt).forEach(key => {
+        Pro_wrap1 += `<option style="padding: 5px 10px;" value="${key}" id=${y}>${key}</option>`;
+        y++
+    })
+    vam('#kihoadonton').innerHTML = Pro_wrap1;
     vam('#kibaocaodt').innerHTML = Pro_wrap;
-    vam('.nav-i-lg_bc p').innerText = vam('#kibaocaodt option[id="1"]').value;
-    loaddulieutong(vam('#kibaocaodt option[id="1"]').value)
+    if (vam('#kibaocaodt option[id="1"]') == null) {
+        loaddulieutong(0)
+    }
+    if (vam('#kibaocaodt option[id="1"]') != null) {
+        loaddulieutong(vam('#kibaocaodt option[id="1"]').value)
+        vam('.title-bkhdt__325').innerText = 'BẢNG CÁO DOANH THU KÌ ' + vam('#kibaocaodt option[id="1"]').value;
+    }
+    if (vam('#kihoadonton option[id="1"]') == null) {
+        loaddulieuhoadonton(0)
+    }
+    if (vam('#kihoadonton option[id="1"]') != null) {
+        loaddulieuhoadonton(vam('#kihoadonton option[id="1"]').value)
+        vams('.title-bkhdt__325')[1].innerText = 'BẢNG KÊ HÓA ĐƠN TỒN KÌ ' + vam('#kihoadonton option[id="1"]').value;
+    }
+
 }
 
 function thaydoi(e) {
     let td = e.value
-    vam('.nav-i-lg_bc p').innerText = td;
+    vam('.title-bkhdt__325').innerText = 'tg';
     let item = ''
     loaddulieutong(td)
 }
-
 function loaddulieutong(td) {
     fetchSheet
         .fetch({
@@ -1193,244 +1230,689 @@ function loaddulieutong(td) {
             wSheetName: "tbHoaDon"
         })
         .then((rows) => {
-            rows.forEach((t) => {
-                if (new Date(t['Ngày Ghi Chỉ Số']).getMonth() + 1 + '/' + new Date(t['Ngày Ghi Chỉ Số']).getFullYear() == td) {
-                    let hd1 = 0;
-                    let kl1 = 0;
-                    let tg1 = 0;
-                    let tn1 = 0;
-                    let tt1 = 0;
-                    let tp1 = 0;
-                    let sum1 = 0;
-                    if (t['Đơn Giá'] == 5800) {
-                        hd1++;
-                        kl1 = kl1 + Number(t['Khối Lượng Tiêu Thụ']);
-                        tg1 = tg1 + Number(t['Tiền giảm']);
-                        tn1 = tn1 + Number(t['Tiền Nước Trước Thuế']);
-                        tt1 = tt1 + Number(t['Thuế GTGT']);
-                        tp1 = tp1 + Number(t['Phí Môi Trường']);
-                        sum1 = sum1 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+            let hd1 = 0;
+            let kl1 = 0;
+            let tg1 = 0;
+            let tn1 = 0;
+            let tt1 = 0;
+            let tp1 = 0;
+            let sum1 = 0;
+            let hd2 = 0;
+            let kl2 = 0;
+            let tg2 = 0;
+            let tn2 = 0;
+            let tt2 = 0;
+            let tp2 = 0;
+            let sum2 = 0;
+            let hd3 = 0;
+            let kl3 = 0;
+            let tg3 = 0;
+            let tn3 = 0;
+            let tt3 = 0;
+            let tp3 = 0;
+            let sum3 = 0;
+            let hd4 = 0;
+            let kl4 = 0;
+            let tg4 = 0;
+            let tn4 = 0;
+            let tt4 = 0;
+            let tp4 = 0;
+            let sum4 = 0;
+            let hd5 = 0;
+            let kl5 = 0;
+            let tg5 = 0;
+            let tn5 = 0;
+            let tt5 = 0;
+            let tp5 = 0;
+            let sum5 = 0;
+            let hd6 = 0;
+            let kl6 = 0;
+            let tg6 = 0;
+            let tn6 = 0;
+            let tt6 = 0;
+            let tp6 = 0;
+            let sum6 = 0;
+            let hd7 = 0;
+            let kl7 = 0;
+            let tg7 = 0;
+            let tn7 = 0;
+            let tt7 = 0;
+            let tp7 = 0;
+            let sum7 = 0;
+            let hd8 = 0;
+            let kl8 = 0;
+            let tg8 = 0;
+            let tn8 = 0;
+            let tt8 = 0;
+            let tp8 = 0;
+            let sum8 = 0;
+            let hd9 = 0;
+            let kl9 = 0;
+            let tg9 = 0;
+            let tn9 = 0;
+            let tt9 = 0;
+            let tp9 = 0;
+            let sum9 = 0;
+            if (td == 0) {
+                item =
+                    `<div class="bcdt_items">
+        <p>Loại 1</p>
+        <p>${hd1}</p>
+        <p>${kl1}</p>
+        <p>${parseFloat(tg1).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn1).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt1).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp1).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum1).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 2</p>
+        <p>${hd2}</p>
+        <p>${kl2}</p>
+        <p>${parseFloat(tg2).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn2).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt2).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp2).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum2).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 3</p>
+        <p>${hd3}</p>
+        <p>${kl3}</p>
+        <p>${parseFloat(tg3).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn3).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt3).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp3).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum3).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 4</p>
+        <p>${hd4}</p>
+        <p>${kl4}</p>
+        <p>${parseFloat(tg4).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn4).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt4).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp4).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum4).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 5</p>
+        <p>${hd5}</p>
+        <p>${kl5}</p>
+        <p>${parseFloat(tg5).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn5).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt5).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp5).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum5).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 6</p>
+        <p>${hd6}</p>
+        <p>${kl6}</p>
+        <p>${parseFloat(tg6).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn6).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt6).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp6).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum6).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 7</p>
+        <p>${hd7}</p>
+        <p>${kl7}</p>
+        <p>${parseFloat(tg7).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn7).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt7).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp7).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum7).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 8</p>
+        <p>${hd8}</p>
+        <p>${kl8}</p>
+        <p>${parseFloat(tg8).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn8).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt8).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp8).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum8).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Tổng</p>
+        <p>${hd9}</p>
+        <p>${kl9}</p>
+        <p>${parseFloat(tg9).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn9).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt9).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp9).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum9).toLocaleString("vi-VN")} vnđ</p>
+    </div>`
+            }
+            else {
+                rows.forEach((t) => {
+                    if (new Date(t['Ngày Ghi Chỉ Số']).getMonth() + 1 + '/' + new Date(t['Ngày Ghi Chỉ Số']).getFullYear() == td && t['Tình trạng'] == 'Hết nợ') {
+                        if (t['Đơn Giá'] == 5800) {
+                            hd1++;
+                            kl1 = kl1 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg1 = tg1 + Number(t['Tiền giảm']);
+                            tn1 = tn1 + Number(t['Tiền Nước Trước Thuế']);
+                            tt1 = tt1 + Number(t['Thuế GTGT']);
+                            tp1 = tp1 + Number(t['Phí Môi Trường']);
+                            sum1 = sum1 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 9500) {
+                            hd2++;
+                            kl2 = kl2 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg2 = tg2 + Number(t['Tiền giảm']);
+                            tn2 = tn2 + Number(t['Tiền Nước Trước Thuế']);
+                            tt2 = tt2 + Number(t['Thuế GTGT']);
+                            tp2 = tp2 + Number(t['Phí Môi Trường']);
+                            sum2 = sum2 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 12500) {
+                            hd3++;
+                            kl3 = kl3 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg3 = tg3 + Number(t['Tiền giảm']);
+                            tn3 = tn3 + Number(t['Tiền Nước Trước Thuế']);
+                            tt3 = tt3 + Number(t['Thuế GTGT']);
+                            tp3 = tp3 + Number(t['Phí Môi Trường']);
+                            sum3 = sum3 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 12800) {
+                            hd4++;
+                            kl4 = kl4 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg4 = tg4 + Number(t['Tiền giảm']);
+                            tn4 = tn4 + Number(t['Tiền Nước Trước Thuế']);
+                            tt4 = tt4 + Number(t['Thuế GTGT']);
+                            tp4 = tp4 + Number(t['Phí Môi Trường']);
+                            sum4 = sum4 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 14500) {
+                            hd5++;
+                            kl5 = kl5 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg5 = tg5 + Number(t['Tiền giảm']);
+                            tn5 = tn5 + Number(t['Tiền Nước Trước Thuế']);
+                            tt5 = tt5 + Number(t['Thuế GTGT']);
+                            tp5 = tp5 + Number(t['Phí Môi Trường']);
+                            sum5 = sum5 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 15000) {
+                            hd6++;
+                            kl6 = kl6 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg6 = tg6 + Number(t['Tiền giảm']);
+                            tn6 = tn6 + Number(t['Tiền Nước Trước Thuế']);
+                            tt6 = tt6 + Number(t['Thuế GTGT']);
+                            tp6 = tp6 + Number(t['Phí Môi Trường']);
+                            sum6 = sum6 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 18500) {
+                            hd7++;
+                            kl7 = kl7 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg7 = tg7 + Number(t['Tiền giảm']);
+                            tn7 = tn7 + Number(t['Tiền Nước Trước Thuế']);
+                            tt7 = tt7 + Number(t['Thuế GTGT']);
+                            tp7 = tp7 + Number(t['Phí Môi Trường']);
+                            sum7 = sum7 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 22000) {
+                            hd8++;
+                            kl8 = kl8 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg8 = tg8 + Number(t['Tiền giảm']);
+                            tn8 = tn8 + Number(t['Tiền Nước Trước Thuế']);
+                            tt8 = tt8 + Number(t['Thuế GTGT']);
+                            tp8 = tp8 + Number(t['Phí Môi Trường']);
+                            sum8 = sum8 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+
+                        hd9++;
+                        kl9 = kl9 + Number(t['Khối Lượng Tiêu Thụ']);
+                        tg9 = tg9 + Number(t['Tiền giảm']);
+                        tn9 = tn9 + Number(t['Tiền Nước Trước Thuế']);
+                        tt9 = tt9 + Number(t['Thuế GTGT']);
+                        tp9 = tp9 + Number(t['Phí Môi Trường']);
+                        sum9 = sum9 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
                     }
-                    let hd2 = 0;
-                    let kl2 = 0;
-                    let tg2 = 0;
-                    let tn2 = 0;
-                    let tt2 = 0;
-                    let tp2 = 0;
-                    let sum2 = 0;
-                    if (t['Đơn Giá'] == 9500) {
-                        hd2++;
-                        kl2 = kl2 + Number(t['Khối Lượng Tiêu Thụ']);
-                        tg2 = tg2 + Number(t['Tiền giảm']);
-                        tn2 = tn2 + Number(t['Tiền Nước Trước Thuế']);
-                        tt2 = tt2 + Number(t['Thuế GTGT']);
-                        tp2 = tp2 + Number(t['Phí Môi Trường']);
-                        sum2 = sum2 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
-                    }
-                    let hd3 = 0;
-                    let kl3 = 0;
-                    let tg3 = 0;
-                    let tn3 = 0;
-                    let tt3 = 0;
-                    let tp3 = 0;
-                    let sum3 = 0;
-                    if (t['Đơn Giá'] == 12500) {
-                        hd3++;
-                        kl3 = kl3 + Number(t['Khối Lượng Tiêu Thụ']);
-                        tg3 = tg3 + Number(t['Tiền giảm']);
-                        tn3 = tn3 + Number(t['Tiền Nước Trước Thuế']);
-                        tt3 = tt3 + Number(t['Thuế GTGT']);
-                        tp3 = tp3 + Number(t['Phí Môi Trường']);
-                        sum3 = sum3 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
-                    }
-                    let hd4 = 0;
-                    let kl4 = 0;
-                    let tg4 = 0;
-                    let tn4 = 0;
-                    let tt4 = 0;
-                    let tp4 = 0;
-                    let sum4 = 0;
-                    if (t['Đơn Giá'] == 12800) {
-                        hd4++;
-                        kl4 = kl4 + Number(t['Khối Lượng Tiêu Thụ']);
-                        tg4 = tg4 + Number(t['Tiền giảm']);
-                        tn4 = tn4 + Number(t['Tiền Nước Trước Thuế']);
-                        tt4 = tt4 + Number(t['Thuế GTGT']);
-                        tp4 = tp4 + Number(t['Phí Môi Trường']);
-                        sum4 = sum4 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
-                    }
-                    let hd5 = 0;
-                    let kl5 = 0;
-                    let tg5 = 0;
-                    let tn5 = 0;
-                    let tt5 = 0;
-                    let tp5 = 0;
-                    let sum5 = 0;
-                    if (t['Đơn Giá'] == 14500) {
-                        hd5++;
-                        kl5 = kl5 + Number(t['Khối Lượng Tiêu Thụ']);
-                        tg5 = tg5 + Number(t['Tiền giảm']);
-                        tn5 = tn5 + Number(t['Tiền Nước Trước Thuế']);
-                        tt5 = tt5 + Number(t['Thuế GTGT']);
-                        tp5 = tp5 + Number(t['Phí Môi Trường']);
-                        sum5 = sum5 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
-                    }
-                    let hd6 = 0;
-                    let kl6 = 0;
-                    let tg6 = 0;
-                    let tn6 = 0;
-                    let tt6 = 0;
-                    let tp6 = 0;
-                    let sum6 = 0;
-                    if (t['Đơn Giá'] == 15000) {
-                        hd6++;
-                        kl6 = kl6 + Number(t['Khối Lượng Tiêu Thụ']);
-                        tg6 = tg6 + Number(t['Tiền giảm']);
-                        tn6 = tn6 + Number(t['Tiền Nước Trước Thuế']);
-                        tt6 = tt6 + Number(t['Thuế GTGT']);
-                        tp6 = tp6 + Number(t['Phí Môi Trường']);
-                        sum6 = sum6 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
-                    }
-                    let hd7 = 0;
-                    let kl7 = 0;
-                    let tg7 = 0;
-                    let tn7 = 0;
-                    let tt7 = 0;
-                    let tp7 = 0;
-                    let sum7 = 0;
-                    if (t['Đơn Giá'] == 18500) {
-                        hd7++;
-                        kl7 = kl7 + Number(t['Khối Lượng Tiêu Thụ']);
-                        tg7 = tg7 + Number(t['Tiền giảm']);
-                        tn7 = tn7 + Number(t['Tiền Nước Trước Thuế']);
-                        tt7 = tt7 + Number(t['Thuế GTGT']);
-                        tp7 = tp7 + Number(t['Phí Môi Trường']);
-                        sum7 = sum7 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
-                    }
-                    let hd8 = 0;
-                    let kl8 = 0;
-                    let tg8 = 0;
-                    let tn8 = 0;
-                    let tt8 = 0;
-                    let tp8 = 0;
-                    let sum8 = 0;
-                    if (t['Đơn Giá'] == 22000) {
-                        hd8++;
-                        kl8 = kl8 + Number(t['Khối Lượng Tiêu Thụ']);
-                        tg8 = tg8 + Number(t['Tiền giảm']);
-                        tn8 = tn8 + Number(t['Tiền Nước Trước Thuế']);
-                        tt8 = tt8 + Number(t['Thuế GTGT']);
-                        tp8 = tp8 + Number(t['Phí Môi Trường']);
-                        sum8 = sum8 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
-                    }
-                    let hd9 = 0;
-                    let kl9 = 0;
-                    let tg9 = 0;
-                    let tn9 = 0;
-                    let tt9 = 0;
-                    let tp9 = 0;
-                    let sum9 = 0;
-                    hd9++;
-                    kl9 = kl9 + Number(t['Khối Lượng Tiêu Thụ']);
-                    tg9 = tg9 + Number(t['Tiền giảm']);
-                    tn9 = tn9 + Number(t['Tiền Nước Trước Thuế']);
-                    tt9 = tt9 + Number(t['Thuế GTGT']);
-                    tp9 = tp9 + Number(t['Phí Môi Trường']);
-                    sum9 = sum9 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
                     item =
                         `<div class="bcdt_items">
-            <p>Loại 1</p>
-            <p>${hd1}</p>
-            <p>${kl1}</p>
-            <p>${parseFloat(tg1).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn1).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt1).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp1).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum1).toLocaleString("vi-VN")} vnđ</p>
-        </div>
-        <div class="bcdt_items">
-            <p>Loại 2</p>
-            <p>${hd2}</p>
-            <p>${kl2}</p>
-            <p>${parseFloat(tg2).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn2).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt2).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp2).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum2).toLocaleString("vi-VN")} vnđ</p>
-        </div>
-        <div class="bcdt_items">
-            <p>Loại 3</p>
-            <p>${hd3}</p>
-            <p>${kl3}</p>
-            <p>${parseFloat(tg3).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn3).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt3).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp3).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum3).toLocaleString("vi-VN")} vnđ</p>
-        </div>
-        <div class="bcdt_items">
-            <p>Loại 4</p>
-            <p>${hd4}</p>
-            <p>${kl4}</p>
-            <p>${parseFloat(tg4).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn4).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt4).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp4).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum4).toLocaleString("vi-VN")} vnđ</p>
-        </div>
-        <div class="bcdt_items">
-            <p>Loại 5</p>
-            <p>${hd5}</p>
-            <p>${kl5}</p>
-            <p>${parseFloat(tg5).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn5).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt5).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp5).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum5).toLocaleString("vi-VN")} vnđ</p>
-        </div>
-        <div class="bcdt_items">
-            <p>Loại 6</p>
-            <p>${hd6}</p>
-            <p>${kl6}</p>
-            <p>${parseFloat(tg6).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn6).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt6).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp6).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum6).toLocaleString("vi-VN")} vnđ</p>
-        </div>
-        <div class="bcdt_items">
-            <p>Loại 7</p>
-            <p>${hd7}</p>
-            <p>${kl7}</p>
-            <p>${parseFloat(tg7).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn7).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt7).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp7).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum7).toLocaleString("vi-VN")} vnđ</p>
-        </div>
-        <div class="bcdt_items">
-            <p>Loại 8</p>
-            <p>${hd8}</p>
-            <p>${kl8}</p>
-            <p>${parseFloat(tg8).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn8).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt8).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp8).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum8).toLocaleString("vi-VN")} vnđ</p>
-        </div>
-        <div class="bcdt_items">
-            <p>Tổng</p>
-            <p>${hd9}</p>
-            <p>${kl9}</p>
-            <p>${parseFloat(tg9).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tn9).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tt9).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(tp9).toLocaleString("vi-VN")} vnđ</p>
-            <p>${parseFloat(sum9).toLocaleString("vi-VN")} vnđ</p>
-        </div>`
-                }
-            })
+                <p>Loại 1</p>
+                <p>${hd1}</p>
+                <p>${kl1}</p>
+                <p>${parseFloat(tg1).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn1).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt1).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp1).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum1).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 2</p>
+                <p>${hd2}</p>
+                <p>${kl2}</p>
+                <p>${parseFloat(tg2).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn2).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt2).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp2).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum2).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 3</p>
+                <p>${hd3}</p>
+                <p>${kl3}</p>
+                <p>${parseFloat(tg3).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn3).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt3).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp3).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum3).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 4</p>
+                <p>${hd4}</p>
+                <p>${kl4}</p>
+                <p>${parseFloat(tg4).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn4).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt4).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp4).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum4).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 5</p>
+                <p>${hd5}</p>
+                <p>${kl5}</p>
+                <p>${parseFloat(tg5).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn5).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt5).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp5).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum5).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 6</p>
+                <p>${hd6}</p>
+                <p>${kl6}</p>
+                <p>${parseFloat(tg6).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn6).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt6).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp6).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum6).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 7</p>
+                <p>${hd7}</p>
+                <p>${kl7}</p>
+                <p>${parseFloat(tg7).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn7).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt7).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp7).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum7).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 8</p>
+                <p>${hd8}</p>
+                <p>${kl8}</p>
+                <p>${parseFloat(tg8).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn8).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt8).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp8).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum8).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Tổng</p>
+                <p>${hd9}</p>
+                <p>${kl9}</p>
+                <p>${parseFloat(tg9).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn9).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt9).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp9).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum9).toLocaleString("vi-VN")} vnđ</p>
+            </div>`
+                })
+            }
+
+
             vam('#bcdtkh_main').innerHTML = item
+        });
+
+}
+
+
+// hóa đơn tồn 
+
+function loaddulieuhoadonton(td) {
+    fetchSheet
+        .fetch({
+            gSheetId: "1PNf5Yvl9yyPByBG9oaDD-_IiJE6N1f0femguCtiUH7o",
+            wSheetName: "tbHoaDon"
+        })
+        .then((rows) => {
+            let hd1 = 0;
+            let kl1 = 0;
+            let tg1 = 0;
+            let tn1 = 0;
+            let tt1 = 0;
+            let tp1 = 0;
+            let sum1 = 0;
+            let hd2 = 0;
+            let kl2 = 0;
+            let tg2 = 0;
+            let tn2 = 0;
+            let tt2 = 0;
+            let tp2 = 0;
+            let sum2 = 0;
+            let hd3 = 0;
+            let kl3 = 0;
+            let tg3 = 0;
+            let tn3 = 0;
+            let tt3 = 0;
+            let tp3 = 0;
+            let sum3 = 0;
+            let hd4 = 0;
+            let kl4 = 0;
+            let tg4 = 0;
+            let tn4 = 0;
+            let tt4 = 0;
+            let tp4 = 0;
+            let sum4 = 0;
+            let hd5 = 0;
+            let kl5 = 0;
+            let tg5 = 0;
+            let tn5 = 0;
+            let tt5 = 0;
+            let tp5 = 0;
+            let sum5 = 0;
+            let hd6 = 0;
+            let kl6 = 0;
+            let tg6 = 0;
+            let tn6 = 0;
+            let tt6 = 0;
+            let tp6 = 0;
+            let sum6 = 0;
+            let hd7 = 0;
+            let kl7 = 0;
+            let tg7 = 0;
+            let tn7 = 0;
+            let tt7 = 0;
+            let tp7 = 0;
+            let sum7 = 0;
+            let hd8 = 0;
+            let kl8 = 0;
+            let tg8 = 0;
+            let tn8 = 0;
+            let tt8 = 0;
+            let tp8 = 0;
+            let sum8 = 0;
+            let hd9 = 0;
+            let kl9 = 0;
+            let tg9 = 0;
+            let tn9 = 0;
+            let tt9 = 0;
+            let tp9 = 0;
+            let sum9 = 0;
+            if (td == 0) {
+                item =
+                    `<div class="bcdt_items">
+        <p>Loại 1</p>
+        <p>${hd1}</p>
+        <p>${kl1}</p>
+        <p>${parseFloat(tg1).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn1).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt1).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp1).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum1).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 2</p>
+        <p>${hd2}</p>
+        <p>${kl2}</p>
+        <p>${parseFloat(tg2).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn2).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt2).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp2).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum2).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 3</p>
+        <p>${hd3}</p>
+        <p>${kl3}</p>
+        <p>${parseFloat(tg3).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn3).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt3).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp3).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum3).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 4</p>
+        <p>${hd4}</p>
+        <p>${kl4}</p>
+        <p>${parseFloat(tg4).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn4).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt4).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp4).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum4).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 5</p>
+        <p>${hd5}</p>
+        <p>${kl5}</p>
+        <p>${parseFloat(tg5).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn5).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt5).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp5).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum5).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 6</p>
+        <p>${hd6}</p>
+        <p>${kl6}</p>
+        <p>${parseFloat(tg6).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn6).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt6).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp6).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum6).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 7</p>
+        <p>${hd7}</p>
+        <p>${kl7}</p>
+        <p>${parseFloat(tg7).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn7).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt7).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp7).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum7).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Loại 8</p>
+        <p>${hd8}</p>
+        <p>${kl8}</p>
+        <p>${parseFloat(tg8).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn8).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt8).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp8).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum8).toLocaleString("vi-VN")} vnđ</p>
+    </div>
+    <div class="bcdt_items">
+        <p>Tổng</p>
+        <p>${hd9}</p>
+        <p>${kl9}</p>
+        <p>${parseFloat(tg9).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tn9).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tt9).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(tp9).toLocaleString("vi-VN")} vnđ</p>
+        <p>${parseFloat(sum9).toLocaleString("vi-VN")} vnđ</p>
+    </div>`
+            }
+            else {
+                rows.forEach((t) => {
+                    if (new Date(t['Ngày Ghi Chỉ Số']).getMonth() + 1 + '/' + new Date(t['Ngày Ghi Chỉ Số']).getFullYear() == td && t['Tình trạng'] == 'Còn nợ') {
+                        if (t['Đơn Giá'] == 5800) {
+                            hd1++;
+                            kl1 = kl1 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg1 = tg1 + Number(t['Tiền giảm']);
+                            tn1 = tn1 + Number(t['Tiền Nước Trước Thuế']);
+                            tt1 = tt1 + Number(t['Thuế GTGT']);
+                            tp1 = tp1 + Number(t['Phí Môi Trường']);
+                            sum1 = sum1 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 9500) {
+                            hd2++;
+                            kl2 = kl2 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg2 = tg2 + Number(t['Tiền giảm']);
+                            tn2 = tn2 + Number(t['Tiền Nước Trước Thuế']);
+                            tt2 = tt2 + Number(t['Thuế GTGT']);
+                            tp2 = tp2 + Number(t['Phí Môi Trường']);
+                            sum2 = sum2 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 12500) {
+                            hd3++;
+                            kl3 = kl3 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg3 = tg3 + Number(t['Tiền giảm']);
+                            tn3 = tn3 + Number(t['Tiền Nước Trước Thuế']);
+                            tt3 = tt3 + Number(t['Thuế GTGT']);
+                            tp3 = tp3 + Number(t['Phí Môi Trường']);
+                            sum3 = sum3 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 12800) {
+                            hd4++;
+                            kl4 = kl4 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg4 = tg4 + Number(t['Tiền giảm']);
+                            tn4 = tn4 + Number(t['Tiền Nước Trước Thuế']);
+                            tt4 = tt4 + Number(t['Thuế GTGT']);
+                            tp4 = tp4 + Number(t['Phí Môi Trường']);
+                            sum4 = sum4 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 14500) {
+                            hd5++;
+                            kl5 = kl5 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg5 = tg5 + Number(t['Tiền giảm']);
+                            tn5 = tn5 + Number(t['Tiền Nước Trước Thuế']);
+                            tt5 = tt5 + Number(t['Thuế GTGT']);
+                            tp5 = tp5 + Number(t['Phí Môi Trường']);
+                            sum5 = sum5 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 15000) {
+                            hd6++;
+                            kl6 = kl6 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg6 = tg6 + Number(t['Tiền giảm']);
+                            tn6 = tn6 + Number(t['Tiền Nước Trước Thuế']);
+                            tt6 = tt6 + Number(t['Thuế GTGT']);
+                            tp6 = tp6 + Number(t['Phí Môi Trường']);
+                            sum6 = sum6 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 18500) {
+                            hd7++;
+                            kl7 = kl7 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg7 = tg7 + Number(t['Tiền giảm']);
+                            tn7 = tn7 + Number(t['Tiền Nước Trước Thuế']);
+                            tt7 = tt7 + Number(t['Thuế GTGT']);
+                            tp7 = tp7 + Number(t['Phí Môi Trường']);
+                            sum7 = sum7 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        if (t['Đơn Giá'] == 22000) {
+                            hd8++;
+                            kl8 = kl8 + Number(t['Khối Lượng Tiêu Thụ']);
+                            tg8 = tg8 + Number(t['Tiền giảm']);
+                            tn8 = tn8 + Number(t['Tiền Nước Trước Thuế']);
+                            tt8 = tt8 + Number(t['Thuế GTGT']);
+                            tp8 = tp8 + Number(t['Phí Môi Trường']);
+                            sum8 = sum8 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        }
+                        hd9++;
+                        kl9 = kl9 + Number(t['Khối Lượng Tiêu Thụ']);
+                        tg9 = tg9 + Number(t['Tiền giảm']);
+                        tn9 = tn9 + Number(t['Tiền Nước Trước Thuế']);
+                        tt9 = tt9 + Number(t['Thuế GTGT']);
+                        tp9 = tp9 + Number(t['Phí Môi Trường']);
+                        sum9 = sum9 + Number(t['Tổng Thanh Toán Sau Thuế GTGT']);
+                        item =
+                            `<div class="bcdt_items">
+                <p>Loại 1</p>
+                <p>${hd1}</p>
+                <p>${kl1}</p>
+                <p>${parseFloat(tg1).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn1).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt1).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp1).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum1).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 2</p>
+                <p>${hd2}</p>
+                <p>${kl2}</p>
+                <p>${parseFloat(tg2).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn2).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt2).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp2).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum2).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 3</p>
+                <p>${hd3}</p>
+                <p>${kl3}</p>
+                <p>${parseFloat(tg3).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn3).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt3).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp3).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum3).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 4</p>
+                <p>${hd4}</p>
+                <p>${kl4}</p>
+                <p>${parseFloat(tg4).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn4).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt4).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp4).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum4).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 5</p>
+                <p>${hd5}</p>
+                <p>${kl5}</p>
+                <p>${parseFloat(tg5).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn5).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt5).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp5).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum5).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 6</p>
+                <p>${hd6}</p>
+                <p>${kl6}</p>
+                <p>${parseFloat(tg6).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn6).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt6).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp6).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum6).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 7</p>
+                <p>${hd7}</p>
+                <p>${kl7}</p>
+                <p>${parseFloat(tg7).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn7).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt7).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp7).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum7).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Loại 8</p>
+                <p>${hd8}</p>
+                <p>${kl8}</p>
+                <p>${parseFloat(tg8).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn8).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt8).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp8).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum8).toLocaleString("vi-VN")} vnđ</p>
+            </div>
+            <div class="bcdt_items">
+                <p>Tổng</p>
+                <p>${hd9}</p>
+                <p>${kl9}</p>
+                <p>${parseFloat(tg9).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tn9).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tt9).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(tp9).toLocaleString("vi-VN")} vnđ</p>
+                <p>${parseFloat(sum9).toLocaleString("vi-VN")} vnđ</p>
+            </div>`
+                    }
+                })
+            }
+            vam('#bchdt_main').innerHTML = item
         });
 
 }

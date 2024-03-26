@@ -1,7 +1,7 @@
 const vam = document.querySelector.bind(document);
 const vams = document.querySelectorAll.bind(document);
 const URL =
-    "https://script.google.com/macros/s/AKfycbxbwJqJD7f7cX04pqI8PvIVLn5ihPsmfRKT0u1i71t2A8-ut8Crev4nlSjO2-1f7qAZ9A/exec";
+    "https://script.google.com/macros/s/AKfycbzkXEyOuoSE2ENbP-Dk_PbfmqaTRIRgHndey77K6mUjfQOaSfLDPgkRjlFNEZP5Lgwy0A/exec";
 var wid = screen.width
 var today = new Date();
 var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();

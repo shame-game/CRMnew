@@ -200,7 +200,7 @@ function More() {
                     addHD(idkh, name, diachi, loai)
                 };
                 if (vams(`.items-HD[style="display:flex"]`).length > 0) {
-                    morehoadon(morei)
+                    morehoadon(morei, idkh, name, diachi, loai)
                 }
                 nav(morei, idkh, name, diachi, loai)
             };
@@ -233,7 +233,7 @@ function More() {
                 vam('.nav-con-items.acc').classList.remove('acc')
                 vam('.thdnav').classList.add('acc')
                 if (vams(`.items-HD[style="display:flex"]`).length > 0) {
-                    morehoadon(morei)
+                    morehoadon(morei, idkh, name, diachi, loai)
                 }
                 nav(morei, idkh, name, diachi, loai)
             };
@@ -437,7 +437,7 @@ function nav(Index, idkh, name, diachi, loai) {
             });
         }
         if (vams(`.items-HD[style="display:flex"]`).length > 0) {
-            morehoadon(Index)
+            morehoadon(Index, idkh, name, diachi, loai)
         }
     });
 }
@@ -569,7 +569,7 @@ function UpdatettKH(index, indexup) {
 }
 /* Thêm hóa đơn */
 function addHD(id, name, address, loai) {
-    ThongTinHD(id, name, address, loai)
+    ThongTinHD('.addHD[style="display:block"]', id, name, address, loai, 'add', 0)
     var inputValu = $(".input-addsHD")
         .map(function () {
             var inputdd = $(this);
@@ -605,7 +605,7 @@ function addHD(id, name, address, loai) {
     }*/
 }
 /* Bộ chọn chức năng cho hóa đơn */
-function morehoadon(Index) {
+function morehoadon(Index, idkh, name, diachi, loai) {
     vams(`.hd[index="${Index}"] .more-HD-con`).forEach((tab) => {
         tab.addEventListener('click', () => {
             let morehd = tab.getAttribute("index")
@@ -637,12 +637,15 @@ function morehoadon(Index) {
                     vams(".buttonup-HD").forEach((tab) => {
                         tab.addEventListener('click', () => {
                             var indexud = tab.getAttribute('index')
-                            vam(`.cnttHD[index="${morehd}"] input[name="Nb"]`).setAttribute('value', `${today.getFullYear()}`)
+                            ThongTinHD(`.cnttHD[index="${indexud}"]`, idkh, name, diachi, loai, 'update', morehd)
+                            let x = vam(`.cnttHD[index="${morehd}"] input[name="NameNH"]`).getAttribute('value');
+                            /*vam(`.cnttHD[index="${morehd}"] input[name="Nb"]`).setAttribute('value', `${today.getFullYear()}`)
                             vam(`.cnttHD[index="${morehd}"] input[name="lNT"]`).setAttribute('value', `${today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear()}`);
                             let c = vam(`.cnttHD[index="${morehd}"] input[name="STK"]`).value;
                             let m = vam(`.cnttHD[index="${morehd}"] input[name="DB"]`).value;
                             vam(`.cnttHD[index="${morehd}"] input[name="NameNH"]`).setAttribute('value', Number(c) - Number(m));
                             let x = vam(`.cnttHD[index="${morehd}"] input[name="NameNH"]`).getAttribute('value');
+                             thông tin cập nhập 
                             if (0 <= x && x <= 4) {
                                 let t = x * 5800
                                 vam(`.cnttHD[index="${morehd}"] input[name="MsT"]`).setAttribute('value', x);
@@ -653,8 +656,8 @@ function morehoadon(Index) {
                                 var number = vam(`.cnttHD[index="${morehd}"] input[name="sH"]`).getAttribute('value')
                                 var word = to_vietnamese(number);
                                 vam(`.cnttHD[index="${morehd}"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                vam(`.cnttHD[index="${morehd}"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.cnttHD[index="${morehd}"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
                             }
                             else if (4 < x && x <= 10) {
                                 let y = x - 4
@@ -667,8 +670,8 @@ function morehoadon(Index) {
                                 var number = vam(`.cnttHD[index="${morehd}"] input[name="sH"]`).getAttribute('value')
                                 var word = to_vietnamese(number);
                                 vam(`.cnttHD[index="${morehd}"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                vam(`.cnttHD[index="${morehd}"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.cnttHD[index="${morehd}"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
                             }
                             else if (10 < x && x <= 20) {
                                 let y = x - 10
@@ -681,8 +684,8 @@ function morehoadon(Index) {
                                 var number = vam(`.cnttHD[index="${morehd}"] input[name="sH"]`).getAttribute('value')
                                 var word = to_vietnamese(number);
                                 vam(`.cnttHD[index="${morehd}"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                vam(`.cnttHD[index="${morehd}"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.cnttHD[index="${morehd}"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
                             }
                             else if (20 < x && x <= 30) {
                                 let y = x - 20
@@ -695,8 +698,8 @@ function morehoadon(Index) {
                                 var number = vam(`.cnttHD[index="${morehd}"] input[name="sH"]`).getAttribute('value')
                                 var word = to_vietnamese(number);
                                 vam(`.cnttHD[index="${morehd}"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                vam(`.cnttHD[index="${morehd}"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.cnttHD[index="${morehd}"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
                             }
                             else if (x > 30) {
                                 let y = x - 30
@@ -709,9 +712,169 @@ function morehoadon(Index) {
                                 var number = vam(`.cnttHD[index="${morehd}"] input[name="sH"]`).getAttribute('value')
                                 var word = to_vietnamese(number);
                                 vam(`.cnttHD[index="${morehd}"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                vam(`.cnttHD[index="${morehd}"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.cnttHD[index="${morehd}"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                            }
+                            if (loai == 'Loại 1') {
+                                vam(`.cnttHD[index="${morehd}"] input[name="lDH"]`).setAttribute('value', 5800);
+                                if (0 <= x && x <= 4) {
+                                    let t = x * 5800
+                                    vam(`.cnttHD[index="${morehd}"] input[name="MsT"]`).setAttribute('value', x);
+                                    vam(`.cnttHD[index="${morehd}"] input[name="kDH"]`).setAttribute('value', t);
+                                    vam(`.cnttHD[index="${morehd}"] input[name="mDH"]`).setAttribute('value', t);
+                                    vam(`.cnttHD[index="${morehd}"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                    var number = vam(`.cnttHD[index="${morehd}"] input[name="sH"]`).getAttribute('value')
+                                    let word = to_vietnamese(number);
+                                    vam(`.cnttHD[index="${morehd}"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                    vam(`.cnttHD[index="${morehd}"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                    vam(`.cnttHD[index="${morehd}"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                }
+                                else if (4 < x && x <= 10) {
+                                    let y = x - 4
+                                    let t = 4 * 5800 + y * 9500
+                                    vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', `4 + ${y}`);
+                                    vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + y * 9500);
+                                    vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                    vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                    var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                    let word = to_vietnamese(number);
+                                    vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                    vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                    vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                }
+                                else if (10 < x && x <= 20) {
+                                    let y = x - 10
+                                    let t = 4 * 5800 + 10 * 9500 + y * 12800
+                                    vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', `4 + 10 + ${y}`);
+                                    vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + y * 12800);
+                                    vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                    vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                    var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                    let word = to_vietnamese(number);
+                                    vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                    vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                    vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                }
+                                else if (20 < x && x <= 30) {
+                                    let y = x - 20
+                                    let t = 4 * 5800 + 10 * 9500 + 10 * 12800 + y * 15000
+                                    vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', `4 + 10 + 10 + ${y}`);
+                                    vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + 10 * 12800 + '+' + y * 15000);
+                                    vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                    vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                    var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                    let word = to_vietnamese(number);
+                                    vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                    vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                    vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                }
+                                else if (x > 30) {
+                                    let y = x - 30
+                                    let t = 4 * 5800 + 10 * 9500 + 10 * 12800 + 10 * 15000 + y * 18500
+                                    vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', `4 + 10 +  10 + 10 + ${y}`);
+                                    vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + 10 * 12800 + '+' + 10 * 15000 + '+' + y * 18500);
+                                    vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                    vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                    var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                    let word = to_vietnamese(number);
+                                    vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                    vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                    vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                                }
+                            }
+                            else if (loai == 'Loại 2') {
+                                let t = x * 9500
+                                vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
+                                vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 9500);
+                                vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                let word = to_vietnamese(number);
+                                vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
                                 vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
                                 vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
                             }
+                            else if (loai == 'Loại 3') {
+                                let t = x * 12500
+                                vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
+                                vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 12500);
+                                vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                let word = to_vietnamese(number);
+                                vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                            }
+                            else if (loai == 'Loại 4') {
+                                let t = x * 12800
+                                vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
+                                vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 12800);
+                                vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                let word = to_vietnamese(number);
+                                vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                            }
+                            else if (loai == 'Loại 5') {
+                                let t = x * 14500
+                                vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
+                                vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 14500);
+                                vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                let word = to_vietnamese(number);
+                                vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                            }
+                            else if (loai == 'Loại 6') {
+                                let t = x * 15000
+                                vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
+                                vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 15000);
+                                vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                let word = to_vietnamese(number);
+                                vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                            }
+                            else if (loai == 'Loại 7') {
+                                let t = x * 18500
+                                vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
+                                vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 18500);
+                                vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                let word = to_vietnamese(number);
+                                vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                            }
+                            else if (loai == 'Loại 8') {
+                                let t = x * 22000
+                                vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
+                                vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 22000);
+                                vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
+                                vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                                var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+                                let word = to_vietnamese(number);
+                                vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                                vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                                vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+                            }*/
+
+
                             var inputValuec = $(`.cnttHD[index='${morehd}'] .input-cnttHD`)
                                 .map(function () {
                                     var inputdc = $(this);
@@ -726,7 +889,7 @@ function morehoadon(Index) {
                                     sonaylasodac = sonaylasodac + 1;
                                 }
                             })
-                            if (sonaylasodac == 0 && x >= 0) {
+                            if (x >= 0) {
                                 vam('.load-wrap').setAttribute('style', 'dislay:flex')
                                 $.ajax({
                                     type: "GET",
@@ -737,9 +900,6 @@ function morehoadon(Index) {
                                     error: function (error) {
                                     },
                                 });
-                            }
-                            else if (sonaylasodac != 0) {
-                                alert('Vui lòng không để trống thông tin')
                             }
                             else if (x < 0) {
                                 alert('chỉ số mới không được thấp hơn chỉ số cũ');
@@ -803,195 +963,384 @@ function morehoadon(Index) {
 
 
 /* Giá trị hóa đơn */
-function ThongTinHD(idkh, name, diachi, loai) {
-    vam(`.addHD[style="display:block"] input[name="iddate"]`).setAttribute('value', `${idkh}`)
-    vam(`.addHD[style="display:block"] input[name="phone"]`).setAttribute('value', `${name}`)
-    vam(`.addHD[style="display:block"] input[name="Pt"]`).setAttribute('value', `${diachi}`)
-    vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 'y')
-    vam(`.addHD[style="display:block"] input[name="Nb"]`).setAttribute('value', `${today.getFullYear()}`)
-    vam(`.addHD[style="display:block"] input[name="address"]`).setAttribute('value', `123`);
-    // lấy giá chị phương thức thanh toán
-    if (vam(`.addHD[style="display:block"] input[name="address"]`)) {
+function ThongTinHD(document, idkh, name, diachi, loai, trangthai, g) {
 
-    }
-    vam(`.addHD[style="display:block"] input[name="lNT"]`).setAttribute('value', `${today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear()}`);
     let s = vams(`.items-HD[style="display:flex"]`).length + 1;
-    vam(`.addHD[style="display:block"] input[name="T"]`).setAttribute('value', `${s}`)
-    if (s <= 1) {
-        vam(`.addHD[style="display:block"] input[name="DB"]`).setAttribute('value', 0)
-    }
-    else {
-        var r = 1
-        vams(`.items-HD[style="display:flex"] .CSM`).forEach((tab) => {
-            if (r == vams(`.items-HD[style="display:flex"]`).length) {
-                vam(`.addHD[style="display:block"] input[name="DB"]`).setAttribute('value', tab.innerText)
-            }
-            r++
-        })
-    }
-    vam(`.addHD[style="display:block"] input[name="id"]`).setAttribute('value', generateUniqueString(7))
-    vam(`.addHD[style="display:block"] input[name="name"]`).setAttribute('value', generateUnique(7))
-    let c = vam(`.addHD[style="display:block"] input[name="STK"]`).value;
-    let m = vam(`.addHD[style="display:block"] input[name="DB"]`).value;
-    vam(`.addHD[style="display:block"] input[name="NameNH"]`).setAttribute('value', Number(c) - Number(m));
-    let x = vam(`.addHD[style="display:block"] input[name="NameNH"]`).getAttribute('value');
 
-    if (loai == 'Loại 1') {
-        vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 5800);
-        if (0 <= x && x <= 4) {
-            let t = x * 5800
-            vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
-            vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
-            vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-            vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-            var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-            let word = to_vietnamese(number);
-            vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-            vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-            vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+    if (trangthai == 'add') {
+        vam(`${document} input[name="iddate"]`).setAttribute('value', `${idkh}`)
+        vam(`${document} input[name="phone"]`).setAttribute('value', `${name}`)
+        vam(`${document} input[name="Pt"]`).setAttribute('value', `${diachi}`)
+        vam(`${document} input[name="lDH"]`).setAttribute('value', 'y')
+        vam(`${document} input[name="Nb"]`).setAttribute('value', `${today.getFullYear()}`)
+        vam(`${document} input[name="address"]`).setAttribute('value', `123`);
+        vam(`${document} input[name="lNT"]`).setAttribute('value', `${today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear()}`);
+        vam(`${document} input[name="T"]`).setAttribute('value', `${s}`);
+        if (s <= 1) {
+            vam(`${document} input[name="DB"]`).setAttribute('value', 0)
         }
-        else if (4 < x && x <= 10) {
-            let y = x - 4
-            let t = 4 * 5800 + y * 9500
-            vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', `4 + ${y}`);
-            vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + y * 9500);
-            vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-            vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-            var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-            let word = to_vietnamese(number);
-            vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-            vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-            vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        else {
+            var r = 1
+            vams(`.items-HD[style="display:flex"] .CSM`).forEach((tab) => {
+                if (r == vams(`.items-HD[style="display:flex"]`).length) {
+                    vam(`${document} input[name="DB"]`).setAttribute('value', tab.innerText)
+                }
+                r++
+            })
         }
-        else if (10 < x && x <= 20) {
-            let y = x - 10
-            let t = 4 * 5800 + 10 * 9500 + y * 12800
-            vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', `4 + 10 + ${y}`);
-            vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + y * 12800);
-            vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-            vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-            var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-            let word = to_vietnamese(number);
-            vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-            vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-            vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        vam(`${document} input[name="id"]`).setAttribute('value', generateUniqueString(7))
+        vam(`${document} input[name="name"]`).setAttribute('value', generateUnique(7))
+        let c = vam(`${document} input[name="STK"]`).value;
+        let m = vam(`${document} input[name="DB"]`).value;
+        vam(`${document} input[name="NameNH"]`).setAttribute('value', Number(c) - Number(m));
+        let x = vam(`${document} input[name="NameNH"]`).getAttribute('value');
+
+        if (loai == 'Loại 1') {
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 5800);
+            if (0 <= x && x <= 4) {
+                let t = x * 5800
+                vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+            else if (4 < x && x <= 10) {
+                let y = x - 4
+                let t = 4 * 5800 + y * 9500
+                vam(`${document} input[name="MsT"]`).setAttribute('value', `4 + ${y}`);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + y * 9500);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+            else if (10 < x && x <= 20) {
+                let y = x - 10
+                let t = 4 * 5800 + 10 * 9500 + y * 12800
+                vam(`${document} input[name="MsT"]`).setAttribute('value', `4 + 10 + ${y}`);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + y * 12800);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+            else if (20 < x && x <= 30) {
+                let y = x - 20
+                let t = 4 * 5800 + 10 * 9500 + 10 * 12800 + y * 15000
+                vam(`${document} input[name="MsT"]`).setAttribute('value', `4 + 10 + 10 + ${y}`);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + 10 * 12800 + '+' + y * 15000);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+            else if (x > 30) {
+                let y = x - 30
+                let t = 4 * 5800 + 10 * 9500 + 10 * 12800 + 10 * 15000 + y * 18500
+                vam(`${document} input[name="MsT"]`).setAttribute('value', `4 + 10 +  10 + 10 + ${y}`);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + 10 * 12800 + '+' + 10 * 15000 + '+' + y * 18500);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
         }
-        else if (20 < x && x <= 30) {
-            let y = x - 20
-            let t = 4 * 5800 + 10 * 9500 + 10 * 12800 + y * 15000
-            vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', `4 + 10 + 10 + ${y}`);
-            vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + 10 * 12800 + '+' + y * 15000);
-            vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-            vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-            var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+        else if (loai == 'Loại 2') {
+            let t = x * 9500
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 9500);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
             let word = to_vietnamese(number);
-            vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-            vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-            vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
         }
-        else if (x > 30) {
-            let y = x - 30
-            let t = 4 * 5800 + 10 * 9500 + 10 * 12800 + 10 * 15000 + y * 18500
-            vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', `4 + 10 +  10 + 10 + ${y}`);
-            vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + 10 * 12800 + '+' + 10 * 15000 + '+' + y * 18500);
-            vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-            vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-            var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
+        else if (loai == 'Loại 3') {
+            let t = x * 12500
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 12500);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
             let word = to_vietnamese(number);
-            vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-            vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-            vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 4') {
+            let t = x * 12800
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 12800);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 5') {
+            let t = x * 14500
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 14500);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 6') {
+            let t = x * 15000
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 15000);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 7') {
+            let t = x * 18500
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 18500);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 8') {
+            let t = x * 22000
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 22000);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
         }
     }
-    else if (loai == 'Loại 2') {
-        let t = x * 9500
-        vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
-        vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 9500);
-        vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-        var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-        let word = to_vietnamese(number);
-        vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-        vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-        vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
+    else if (trangthai == 'update') {
+        vam(`${document}[index="${g}"] input[name="iddate"]`).setAttribute('value', `${idkh}`)
+        vam(`${document}[index="${g}"] input[name="phone"]`).setAttribute('value', `${name}`)
+        vam(`${document}[index="${g}"] input[name="Pt"]`).setAttribute('value', `${diachi}`)
+        vam(`${document}[index="${g}"] input[name="lDH"]`).setAttribute('value', 'y')
+        vam(`${document}[index="${g}"] input[name="Nb"]`).setAttribute('value', `${today.getFullYear()}`)
+        vam(`${document}[index="${g}"] input[name="address"]`).setAttribute('value', `123`);
+        vam(`${document}[index="${g}"] input[name="lNT"]`).setAttribute('value', `${today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear()}`);
+        vam(`${document}[index="${g}"] input[name="T"]`).setAttribute('value', `${s - 1}`);
+        /* if (s = 2) {
+             vam(`.cnttHD[index="${g}"] input[name="DB"]`).setAttribute('value', 0)
+         }
+         else if (s > 2) {
+             var r = 1
+             console.log(vams(`.items-HD[style="display:flex"]`).length);
+             vams(`.items-HD[style="display:flex"] .CSM`).forEach((tab) => {
+                 if (r == vams(`.items-HD[style="display:flex"]`).length - 1) {
+                     vam(`${document}[index="${g}"] input[name="DB"]`).setAttribute('value', tab.innerText)
+                 }
+                 r++
+             })
+         }*/
+        vam(`${document} input[name="id"]`).setAttribute('value', generateUniqueString(7))
+        vam(`${document} input[name="name"]`).setAttribute('value', generateUnique(7))
+        let c = vam(`${document} input[name="STK"]`).value;
+        let m = vam(`${document} input[name="DB"]`).value;
+        vam(`${document} input[name="NameNH"]`).setAttribute('value', Number(c) - Number(m));
+        let x = vam(`${document} input[name="NameNH"]`).getAttribute('value');
+
+        if (loai == 'Loại 1') {
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 5800);
+            if (0 <= x && x <= 4) {
+                let t = x * 5800
+                vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+            else if (4 < x && x <= 10) {
+                let y = x - 4
+                let t = 4 * 5800 + y * 9500
+                vam(`${document} input[name="MsT"]`).setAttribute('value', `4 + ${y}`);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + y * 9500);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+            else if (10 < x && x <= 20) {
+                let y = x - 10
+                let t = 4 * 5800 + 10 * 9500 + y * 12800
+                vam(`${document} input[name="MsT"]`).setAttribute('value', `4 + 10 + ${y}`);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + y * 12800);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+            else if (20 < x && x <= 30) {
+                let y = x - 20
+                let t = 4 * 5800 + 10 * 9500 + 10 * 12800 + y * 15000
+                vam(`${document} input[name="MsT"]`).setAttribute('value', `4 + 10 + 10 + ${y}`);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + 10 * 12800 + '+' + y * 15000);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+            else if (x > 30) {
+                let y = x - 30
+                let t = 4 * 5800 + 10 * 9500 + 10 * 12800 + 10 * 15000 + y * 18500
+                vam(`${document} input[name="MsT"]`).setAttribute('value', `4 + 10 +  10 + 10 + ${y}`);
+                vam(`${document} input[name="kDH"]`).setAttribute('value', 4 * 5800 + '+' + 10 * 9500 + '+' + 10 * 12800 + '+' + 10 * 15000 + '+' + y * 18500);
+                vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+                vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+                var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+                let word = to_vietnamese(number);
+                vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+                vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+                vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+            }
+        }
+        else if (loai == 'Loại 2') {
+            let t = x * 9500
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 9500);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 3') {
+            let t = x * 12500
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 12500);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 4') {
+            let t = x * 12800
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 12800);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 5') {
+            let t = x * 14500
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 14500);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 6') {
+            let t = x * 15000
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 15000);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 7') {
+            let t = x * 18500
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 18500);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
+        else if (loai == 'Loại 8') {
+            let t = x * 22000
+            vam(`${document} input[name="MsT"]`).setAttribute('value', x);
+            vam(`${document} input[name="lDH"]`).setAttribute('value', 22000);
+            vam(`${document} input[name="kDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="mDH"]`).setAttribute('value', t);
+            vam(`${document} input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
+            var number = vam(`${document} input[name="sH"]`).getAttribute('value')
+            let word = to_vietnamese(number);
+            vam(`${document} input[name="lHT"]`).setAttribute('value', word + ' đồng');
+            vam(`${document} input[name="pay"]`).setAttribute('value', t / 100 * 5);
+            vam(`${document} input[name="loai"]`).setAttribute('value', t / 100 * 10);
+        }
     }
-    else if (loai == 'Loại 3') {
-        let t = x * 12500
-        vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
-        vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 12500);
-        vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-        var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-        let word = to_vietnamese(number);
-        vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-        vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-        vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
-    }
-    else if (loai == 'Loại 4') {
-        let t = x * 12800
-        vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
-        vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 12800);
-        vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-        var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-        let word = to_vietnamese(number);
-        vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-        vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-        vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
-    }
-    else if (loai == 'Loại 5') {
-        let t = x * 14500
-        vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
-        vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 14500);
-        vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-        var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-        let word = to_vietnamese(number);
-        vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-        vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-        vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
-    }
-    else if (loai == 'Loại 6') {
-        let t = x * 15000
-        vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
-        vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 15000);
-        vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-        var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-        let word = to_vietnamese(number);
-        vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-        vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-        vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
-    }
-    else if (loai == 'Loại 7') {
-        let t = x * 18500
-        vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
-        vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 18500);
-        vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-        var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-        let word = to_vietnamese(number);
-        vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-        vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-        vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
-    }
-    else if (loai == 'Loại 8') {
-        let t = x * 22000
-        vam(`.addHD[style="display:block"] input[name="MsT"]`).setAttribute('value', x);
-        vam(`.addHD[style="display:block"] input[name="lDH"]`).setAttribute('value', 22000);
-        vam(`.addHD[style="display:block"] input[name="kDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="mDH"]`).setAttribute('value', t);
-        vam(`.addHD[style="display:block"] input[name="sH"]`).setAttribute('value', t + t / 100 * 10 + t / 100 * 5);
-        var number = vam(`.addHD[style="display:block"] input[name="sH"]`).getAttribute('value')
-        let word = to_vietnamese(number);
-        vam(`.addHD[style="display:block"] input[name="lHT"]`).setAttribute('value', word + ' đồng');
-        vam(`.addHD[style="display:block"] input[name="pay"]`).setAttribute('value', t / 100 * 5);
-        vam(`.addHD[style="display:block"] input[name="loai"]`).setAttribute('value', t / 100 * 10);
-    }
+
 }
