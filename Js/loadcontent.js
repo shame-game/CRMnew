@@ -143,7 +143,6 @@ function HD(Children, document) {
                                 <div class='more-detail-HD' style="display:none" index=${i}>
                                     <a class="button detail-hoadon"><i class="bi bi-info-circle"></i><p>Chi tiết hóa đơn</p></a>
                                     <a class="button update-hoadon"><i class="bi bi-pen"></i><p>Sửa hóa đơn</p></a>
-                                    <a class="button updated"><i class="bi bi-file-earmark-plus"></i><p>Xuất hóa đơn</p></a>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +167,6 @@ function HD(Children, document) {
                                 <div class='more-detail-HD' style="display:none" index=${i}>
                                     <a class="button detail-hoadon"><i class="bi bi-info-circle"></i><p>Chi tiết hóa đơn</p></a>
                                     <a class="button update-hoadon"><i class="bi bi-pen"></i><p>Sửa hóa đơn</p></a>
-                                    <a class="button updated"><i class="bi bi-file-earmark-plus"></i><p>Xuất hóa đơn</p></a>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +201,6 @@ function HienThiHD(Children, document) {
                         <div class='more-detail-HD' style="display:none" index=${i}>
                             <a class="button detail-hoadon"><i class="bi bi-info-circle"></i><p>Chi tiết hóa đơn</p></a>
                             <a class="button update-hoadon"><i class="bi bi-pen"></i><p>Sửa hóa đơn</p></a>
-                            <a class="button updated"><i class="bi bi-file-earmark-plus"></i><p>Xuất hóa đơn</p></a>
                         </div> 
                     </div>
                 </div>
@@ -229,7 +226,6 @@ function HienThiHD(Children, document) {
                         <div class='more-detail-HD' style="display:none" index=${i}>
                             <a class="button detail-hoadon"><i class="bi bi-info-circle"></i><p>Chi tiết hóa đơn</p></a>
                             <a class="button update-hoadon"><i class="bi bi-pen"></i><p>Sửa hóa đơn</p></a>
-                            <a class="button updated"><i class="bi bi-file-earmark-plus"></i><p>Xuất hóa đơn</p></a>
                         </div> 
                     </div>
                 </div>
